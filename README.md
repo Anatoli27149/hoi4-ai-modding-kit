@@ -1,85 +1,97 @@
 # HOI4 AI Modding Kit
 
-A shareable project for building Hearts of Iron IV mods with AI in a disciplined way.
+> 一个面向《钢铁雄心4》模组开发的 AI 工具链仓库。  
+> A practical toolkit for building Hearts of Iron IV mods with AI.
 
-## 中文简介
+---
 
-这是一个面向《钢铁雄心4》模组开发的 AI 工作流仓库，目标不是“随便生成一点脚本”，而是把真正能长期使用的三层工具链放在一起：
+## 这是什么
 
-- `VS Code + CWTools` 负责编辑器内的语法、作用域和引用校验
-- `hoi4-modding` Skill 负责约束 AI 的工作方式，让它按完整内容包来改，而不是只吐零碎片段
-- 本地 `MCP / CLI` 负责做模组根目录识别、ID 盘点、缺失本地化检查和 `error.log` 汇总
+`HOI4 AI Modding Kit` 不是单纯的“提示词集合”，也不是一个只会读文件的 MCP。
 
-如果你的目标是“用 AI 更稳定地做 HOI4 模组”，而不是只试一两个 prompt，这个仓库就是给这个场景准备的。
+它是一套面向 HOI4 模组开发的完整工作流，目标是让 AI 在做模组时更像一个靠谱的协作者，而不是偶尔吐出几段看起来像脚本的文本。
 
-This repository packages three layers together:
+这个仓库把三层能力放到了一起：
 
-- A Codex skill for HOI4-focused planning, generation, review, and debugging.
-- A lightweight local MCP server for mod-root discovery, ID inventory, localisation audits, and error-log summaries.
-- Project docs and CLI tools so the workflow is usable even outside Codex.
+- `VS Code + CWTools`
+  负责编辑器内的语法、作用域、引用和部分本地化校验
+- `hoi4-modding Skill`
+  负责约束 AI 的工作方式，让它按 HOI4 的真实结构来生成、修改、检查内容
+- `本地 MCP / CLI`
+  负责做模组根目录识别、ID 盘点、缺失本地化检查、`error.log` 汇总
 
-## Why this exists
+如果你的目标是：
 
-For HOI4 modding, the highest-value AI setup is usually not "just use a model" and not "just use an MCP."
-The practical stack is:
+- 用 AI 辅助做 HOI4 模组
+- 降低 namespace、localisation、ID 冲突、配套文件遗漏这类错误
+- 把自己的 HOI4 开发流程沉淀成长期可复用工具链
 
-- `VS Code + CWTools` for editor-time syntax and scope validation.
-- A focused `hoi4-modding` skill for consistent generation and review behavior.
-- A small local MCP/CLI layer for structure checks, localisation coverage, and log-driven debugging.
+那这个仓库就是为这个场景准备的。
 
-That is the stack this repository implements.
+---
 
-## Repository layout
+## 适合谁
 
-```text
-docs/                     Project docs, setup, syntax reference, and workflow spec
-skills/hoi4-modding/      Codex skill bundle
-src/hoi4_ai_modding/      Python package for MCP and CLI tooling
-tools/                    Convenience installer scripts
-```
+- 想用 AI 辅助开发 HOI4 模组的中文用户
+- 已经会写一些 focus、event、decision，但总是漏本地化或作用域检查的人
+- 想把“AI + MCP + Skill”真正用于具体项目，而不是停留在概念层的人
+- 想把自己的 HOI4 工作流做成可分享、可维护仓库的人
 
-## Quick start
+不太适合：
 
-1. Install the package in editable mode:
+- 只想随便试一个 prompt，不需要本地工具链的人
+- 不打算使用 Python / VS Code / 本地文件工作流的人
+
+---
+
+## 你能用它做什么
+
+这个项目当前最适合解决下面这些高频问题：
+
+- 找出哪个目录才是真正的 HOI4 mod 根目录
+- 快速盘点 focus、event、decision、scripted 内容中的 ID 和 namespace
+- 检查缺失 localisation
+- 汇总 `error.log` 中最有价值的报错类别
+- 让 AI 在改动时遵守“完整内容包”思路，而不是只改一个孤立片段
+
+例如：
+
+- 做一条新的德国工业线 focus，并连带补齐 localisation
+- 为某个国家添加事件链，并检查 namespace 是否冲突
+- 排查“脚本看着没错但游戏里不生效”的问题
+- 先读 `error.log`，再决定该先修缺 loc、未知 effect，还是 scope 问题
+
+---
+
+## 为什么这套方案适合 HOI4
+
+HOI4 模组开发里最常见的问题，不是“AI 不会写几行语法”，而是：
+
+- 改了 focus，忘了补 `_desc`
+- 写了 event，没处理 namespace
+- 改了 decision，没补对应 localisation
+- 逻辑块能写出来，但 scope 不对
+- 报错很多时，不知道应该先修哪一类
+
+所以更有效的方案不是只加大模型，也不是只接更多工具，而是把三件事同时做好：
+
+1. 编辑器实时校验
+2. AI 工作流约束
+3. 本地结构化检查
+
+这个仓库就是围绕这三个层面设计的。
+
+---
+
+## 三分钟上手
+
+### 1. 安装 Python 包
 
 ```powershell
 python -m pip install -e .
 ```
 
-2. Use the CLI against a mod:
-
-```powershell
-hoi4-find-mod-roots "D:\Games\HOI4\mod"
-hoi4-inspect-mod "D:\Games\HOI4\mod\my_mod"
-hoi4-inventory-ids "D:\Games\HOI4\mod\my_mod"
-hoi4-audit-localisation "D:\Games\HOI4\mod\my_mod"
-hoi4-summarize-log "C:\Users\<you>\Documents\Paradox Interactive\Hearts of Iron IV\logs\error.log"
-```
-
-If the installed script directory is not on `PATH`, use the module entry instead:
-
-```powershell
-python -m hoi4_ai_modding find-mod-roots "D:\Games\HOI4\mod"
-python -m hoi4_ai_modding inspect-mod "D:\Games\HOI4\mod\my_mod"
-```
-
-3. If you use Codex, install the skill and MCP integration:
-
-```powershell
-.\tools\install_codex_integration.ps1
-```
-
-4. In VS Code, install `tboby.cwtools-vscode`.
-
-## 中文快速开始
-
-1. 安装 Python 包：
-
-```powershell
-python -m pip install -e .
-```
-
-2. 对模组目录做结构检查：
+### 2. 对模组目录做基础检查
 
 ```powershell
 python -m hoi4_ai_modding find-mod-roots "D:\Games\HOI4\mod"
@@ -88,13 +100,21 @@ python -m hoi4_ai_modding inventory-ids "D:\Games\HOI4\mod\my_mod"
 python -m hoi4_ai_modding audit-localisation "D:\Games\HOI4\mod\my_mod"
 ```
 
-3. 如果你在用 Codex，把 `skills/hoi4-modding/` 安装进本地技能目录，并注册 MCP。
+### 3. 汇总错误日志
 
-4. 在 VS Code 里安装 `CWTools`，让编辑器即时提示脚本问题。
+```powershell
+python -m hoi4_ai_modding summarize-log "C:\Users\<you>\Documents\Paradox Interactive\Hearts of Iron IV\logs\error.log"
+```
 
-## Codex MCP config
+### 4. 如果你使用 Codex
 
-Add this server block to your Codex config if the installer did not do it for you:
+运行：
+
+```powershell
+.\tools\install_codex_integration.ps1
+```
+
+然后把 MCP 配置注册到 Codex：
 
 ```toml
 [mcp_servers.hoi4-modding]
@@ -102,21 +122,141 @@ command = "python"
 args = ["-m", "hoi4_ai_modding.mcp_server"]
 ```
 
-## Recommended workflow
+### 5. 如果你使用 VS Code
 
-1. Use the skill to inspect the mod before editing.
-2. Generate or revise content in full bundles, not isolated snippets.
-3. Run ID inventory and localisation audit after every meaningful change.
-4. Use `error.log` summaries to drive debugging instead of guessing.
-5. Let CWTools catch syntax and scope issues while editing.
+安装 `CWTools`：
 
-## Docs
+```powershell
+code --install-extension tboby.cwtools-vscode
+```
 
-- [Setup](./docs/setup.md)
-- [Project Spec](./docs/project-spec.md)
-- [Syntax Quick Reference](./docs/syntax-quick-reference.md)
-- [中文说明](./docs/README.zh-CN.md)
+---
 
-## Status
+## 推荐工作流
 
-This project is intentionally lightweight. It does not try to replace CWTools or the game's own documentation pages. It aims to make AI-assisted HOI4 modding more reliable and repeatable.
+实际使用时，最稳的顺序通常是：
+
+1. 先识别 mod 根目录
+2. 先盘点结构和现有命名规则
+3. 再让 AI 生成或修改内容
+4. 改完以后立即跑 ID 审计和 localisation 审计
+5. 出问题时先汇总 `error.log`
+6. 再回去修逻辑、作用域或缺失资源
+
+一句话概括：
+
+`先看结构 -> 再改内容 -> 再做审计 -> 最后按日志修错`
+
+---
+
+## 仓库结构
+
+```text
+docs/                     项目文档、安装说明、语法速查
+skills/hoi4-modding/      Codex Skill
+src/hoi4_ai_modding/      Python 包，提供 CLI 和 MCP
+tools/                    安装到 Codex 的便捷脚本
+```
+
+核心目录说明：
+
+- `skills/hoi4-modding/`
+  定义 AI 在 HOI4 任务里的工作方式
+- `src/hoi4_ai_modding/core.py`
+  放核心检测逻辑
+- `src/hoi4_ai_modding/mcp_server.py`
+  把本地检测能力包装成 MCP
+- `docs/syntax-quick-reference.md`
+  放实战向 HOI4 语法速查
+
+---
+
+## 常用命令
+
+### 查找可能的模组根目录
+
+```powershell
+python -m hoi4_ai_modding find-mod-roots "D:\Games\HOI4\mod"
+```
+
+### 查看模组结构摘要
+
+```powershell
+python -m hoi4_ai_modding inspect-mod "D:\Games\HOI4\mod\my_mod"
+```
+
+### 盘点 ID / namespace
+
+```powershell
+python -m hoi4_ai_modding inventory-ids "D:\Games\HOI4\mod\my_mod"
+```
+
+### 检查缺失 localisation
+
+```powershell
+python -m hoi4_ai_modding audit-localisation "D:\Games\HOI4\mod\my_mod"
+```
+
+### 汇总 error.log
+
+```powershell
+python -m hoi4_ai_modding summarize-log "C:\Users\<you>\Documents\Paradox Interactive\Hearts of Iron IV\logs\error.log"
+```
+
+### 启动 MCP 服务
+
+```powershell
+python -m hoi4_ai_modding serve-mcp
+```
+
+---
+
+## 和游戏原版文档的关系
+
+这个仓库不是为了替代 HOI4 自带 documentation 文件。
+
+如果你要查“当前游戏版本最完整的 trigger / effect 列表”，优先看游戏安装目录里的：
+
+- `...\Hearts of Iron IV\documentation\triggers_documentation.html`
+- `...\Hearts of Iron IV\documentation\effects_documentation.html`
+
+本仓库更偏向：
+
+- 高频实战语法
+- 开发流程约束
+- 项目结构检查
+- AI 协作规范
+
+也就是说，它解决的是“怎么更稳地做模组”，不是单纯提供一份 token 大字典。
+
+---
+
+## 文档导航
+
+- [安装说明](./docs/setup.md)
+- [项目规范](./docs/project-spec.md)
+- [HOI4 语法速查](./docs/syntax-quick-reference.md)
+- [中文说明页](./docs/README.zh-CN.md)
+
+---
+
+## 当前状态
+
+项目目前是一个轻量但实用的起步版本，重点放在：
+
+- 把 AI 协作流程做稳
+- 把最有价值的本地检查能力做出来
+- 让中文使用者可以快速看懂并开始使用
+
+后续如果继续扩展，比较值得做的方向包括：
+
+- 更强的 HOI4 内容类型识别
+- 更细的资源引用检查
+- 更完整的中文文档和示例模组
+- 面向具体玩法类型的 skill 子模块
+
+---
+
+## English summary
+
+This repository bundles a Codex skill, a local MCP server, and CLI tools for practical AI-assisted Hearts of Iron IV modding. It is designed to help users inspect mod structure, audit IDs and localisation, summarize `error.log`, and keep AI output aligned with real HOI4 project structure.

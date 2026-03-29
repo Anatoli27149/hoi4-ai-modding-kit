@@ -1,60 +1,106 @@
 # HOI4 AI Modding Kit 中文说明
 
-## 这是什么
+## 项目定位
 
-这是一个把 `Skill + MCP + CLI + 文档` 打包在一起的 HOI4 AI 模组开发仓库。
+这个项目的目标很明确：
 
-它解决的不是“AI 会不会写一点 HOI4 代码”，而是下面这些更实际的问题：
+让 AI 在 HOI4 模组开发里变得更稳、更像一个真正能协作的开发助手。
 
-- 如何先识别真正的模组根目录
-- 如何在改完 focus、event、decision 之后顺手查 ID 冲突
-- 如何检查缺失 localisation
-- 如何把 `error.log` 里的重复报错先归类，再决定先修什么
-- 如何让 AI 遵守一个稳定的工作流程，而不是每次随意发挥
+它不是单纯的提示词仓库，也不是只提供一个 MCP 服务，而是把三层东西组合起来：
 
-## 仓库里有什么
+- `Skill`
+  规定 AI 在 HOI4 模组任务里应该怎样工作
+- `MCP / CLI`
+  提供本地结构检查和日志分析能力
+- `文档`
+  帮助中文使用者快速理解项目、安装方式和工作流
 
-- `skills/hoi4-modding/`
-  面向 Codex 的 Skill，负责告诉 AI 应该怎样完成 HOI4 模组任务。
-- `src/hoi4_ai_modding/`
-  Python 包，既可以当命令行工具用，也可以作为 MCP 服务使用。
-- `docs/`
-  项目说明、安装文档、语法速查表。
-- `tools/install_codex_integration.ps1`
-  Windows 下把 Skill 安装到 Codex 目录的便捷脚本。
+## 为什么要做这个项目
 
-## 最适合谁
+HOI4 模组开发里最烦人的问题，往往不是语法本身，而是这些细节：
 
-- 想用 AI 辅助做 HOI4 模组的人
-- 已经会写一点模组，但总漏 localisation、namespace、配套文件的人
-- 想把自己的 HOI4 开发流程沉淀成可复用工具链的人
+- 改了 focus 但没补 `_desc`
+- 事件 namespace 写乱了
+- decision 和 localisation 没配套
+- 逻辑块看着像对的，但 scope 不对
+- 日志报错太多，不知道先修哪一类
 
-## 推荐使用方式
+AI 很容易在这些地方“看起来会写，实际不稳定”。
 
-1. 在 VS Code 安装 `CWTools`
-2. 用本仓库的 CLI 或 MCP 先检查模组结构
-3. 再让 AI 去做具体功能
-4. 每次改完都跑一次 ID 和 localisation 审计
-5. 出问题时先看 `error.log` 汇总，而不是直接猜
+所以这个项目的思路不是“让 AI 写得更多”，而是：
 
-## 最常用命令
+- 让编辑器帮你校验
+- 让 skill 约束 AI 工作方式
+- 让本地工具补上结构化检查
 
-```powershell
-python -m pip install -e .
-python -m hoi4_ai_modding find-mod-roots "D:\Games\HOI4\mod"
-python -m hoi4_ai_modding inspect-mod "D:\Games\HOI4\mod\my_mod"
-python -m hoi4_ai_modding inventory-ids "D:\Games\HOI4\mod\my_mod"
-python -m hoi4_ai_modding audit-localisation "D:\Games\HOI4\mod\my_mod"
-python -m hoi4_ai_modding summarize-log "C:\Users\<you>\Documents\Paradox Interactive\Hearts of Iron IV\logs\error.log"
-```
+## 这套仓库最适合的场景
 
-## 关于“完整语法”
+- 做 focus、event、decision、idea 这类常规模组内容
+- 想让 AI 改完以后顺手检查缺失本地化
+- 想快速定位 `error.log` 里最值得先处理的问题
+- 想把自己的 HOI4 开发工作流沉淀成工具链
 
-本仓库提供的是高频、实战向速查，而不是替代游戏本体自带文档。
+## 仓库里最重要的内容
 
-如果你要查当前游戏版本最完整的 trigger / effect 列表，优先看游戏安装目录里的：
+### `skills/hoi4-modding/`
+
+这是 Codex 用的 skill，负责约束 AI 的行为，比如：
+
+- 先看相邻文件
+- 先确认 mod 根目录
+- 改动按“内容包”走，不只改单个文件
+- 改完后检查 ID 和 localisation
+
+### `src/hoi4_ai_modding/`
+
+这是 Python 包，提供命令行和 MCP 能力。
+
+你可以用它来：
+
+- 查模组根目录
+- 看模组结构
+- 盘点 ID 和 namespace
+- 找缺失 localisation
+- 汇总 `error.log`
+
+### `docs/`
+
+放项目文档，包括：
+
+- 安装说明
+- 项目规范
+- HOI4 语法速查
+
+## 建议的使用顺序
+
+1. 先用工具确认 mod 根目录
+2. 再看项目现有结构和命名风格
+3. 再让 AI 去写或改内容
+4. 改完以后跑审计
+5. 如果报错，再回头看 `error.log`
+
+这比直接上来让 AI “给我写一个事件链”要稳得多。
+
+## 关于完整语法
+
+这个仓库提供的是“高频、实战向、适合 AI 协作”的内容。
+
+如果你要查当前游戏版本最完整的 trigger / effect 列表，还是优先看游戏安装目录里的：
 
 - `documentation/triggers_documentation.html`
 - `documentation/effects_documentation.html`
 
-因为百科页面和社区资料可能会滞后于你当前版本。
+因为这两份文件最接近你当前安装版本，可靠性比很多社区资料更高。
+
+## 适合中文使用者的阅读顺序
+
+推荐按这个顺序看：
+
+1. 先看仓库首页 `README.md`
+2. 再看 [安装说明](./setup.md)
+3. 再看 [语法速查](./syntax-quick-reference.md)
+4. 真正上手时再看 [项目规范](./project-spec.md)
+
+## 一句话总结
+
+这个项目不是想“替你写完 HOI4 模组”，而是帮你把 AI 变成一个更靠谱的 HOI4 模组协作工具。
