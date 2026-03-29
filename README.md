@@ -52,6 +52,7 @@
 - 检查缺失 localisation
 - 汇总 `error.log` 中最有价值的报错类别
 - 让 AI 在改动时遵守“完整内容包”思路，而不是只改一个孤立片段
+- 把“创建国家、创建州、分配工厂、生成州预览图”这类大块任务拆成稳定流程
 
 例如：
 
@@ -152,7 +153,7 @@ code --install-extension tboby.cwtools-vscode
 ## 仓库结构
 
 ```text
-docs/                     项目文档、安装说明、语法速查
+docs/                     项目文档、安装说明、语法速查、任务公式
 skills/hoi4-modding/      Codex Skill
 src/hoi4_ai_modding/      Python 包，提供 CLI 和 MCP
 tools/                    安装到 Codex 的便捷脚本
@@ -168,6 +169,8 @@ tools/                    安装到 Codex 的便捷脚本
   MCP 入口
 - `docs/syntax-quick-reference.md`
   常用语法速查
+- `docs/hoi4-country-state-formulas.md`
+  国家、州、地图和建筑分配的细化公式
 
 ---
 
@@ -236,6 +239,7 @@ python -m hoi4_ai_modding serve-mcp
 - [安装说明](./docs/setup.md)
 - [项目规范](./docs/project-spec.md)
 - [HOI4 语法速查](./docs/syntax-quick-reference.md)
+- [国家 / 州 / 地图 / 工厂公式](./docs/hoi4-country-state-formulas.md)
 - [中文说明页](./docs/README.zh-CN.md)
 
 ---
@@ -247,6 +251,7 @@ python -m hoi4_ai_modding serve-mcp
 - 把 AI 协作流程做稳
 - 把最有价值的本地检查能力做出来
 - 让中文使用者可以快速看懂并开始使用
+- 把国家、州、地图和建筑这类高频重活补成可复用的公式文档
 
 后面如果继续往下做，比较值得补的方向有：
 

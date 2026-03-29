@@ -4,6 +4,8 @@ This is a practical quick reference for the HOI4 scripting patterns most often n
 
 For full version-specific trigger and effect coverage, use the local HOI4 documentation files shipped with the game.
 
+If you are working on country creation, state history, map overlays, or building-slot planning, read [hoi4-country-state-formulas.md](./hoi4-country-state-formulas.md) together with this quick reference.
+
 ## Base syntax
 
 ```txt
@@ -215,6 +217,94 @@ available = {
 }
 ```
 
+## Country history template
+
+```txt
+capital = 610
+
+set_research_slots = 3
+set_convoys = 10
+
+set_technology = {
+    infantry_weapons = 1
+    tech_support = 1
+}
+
+set_politics = {
+    ruling_party = neutrality
+    last_election = "1936.1.1"
+    election_frequency = 48
+    elections_allowed = no
+}
+
+set_popularities = {
+    fascism = 10
+    democratic = 20
+    neutrality = 65
+    communism = 5
+}
+
+set_stability = 0.35
+set_war_support = 0.15
+set_oob = "TAG_1936"
+recruit_character = TAG_founder
+```
+
+Quick notes:
+
+- `capital` uses a state ID, not a province ID.
+- `set_popularities` should add up to exactly `100`.
+- `recruit_character` is usually cleaner than creating ad hoc leaders once the project has `common/characters/`.
+
+## State history template
+
+```txt
+state = {
+    id = 610
+    name = "STATE_610"
+    manpower = 850000
+
+    resources = {
+        steel = 8
+    }
+
+    state_category = town
+
+    history = {
+        owner = TAG
+        controller = TAG
+        add_core_of = TAG
+
+        victory_points = {
+            12345 10
+        }
+
+        buildings = {
+            infrastructure = 3
+            industrial_complex = 2
+            arms_factory = 1
+            air_base = 2
+
+            12345 = {
+                naval_base = 3
+            }
+        }
+    }
+
+    provinces = {
+        12340 12341 12342 12343 12345
+    }
+
+    local_supplies = 2.0
+}
+```
+
+Quick notes:
+
+- `name = "STATE_610"` is a localisation key, not display text.
+- Province buildings such as `naval_base`, `bunker`, and `coastal_bunker` belong under a specific province block.
+- Shared-slot planning matters for `industrial_complex`, `arms_factory`, `dockyard`, `synthetic_refinery`, `fuel_silo`, `rocket_site`, and `nuclear_reactor`.
+
 ## On actions
 
 ```txt
@@ -275,5 +365,7 @@ l_english:
 - Always define an event namespace before event IDs.
 - Focus, event, decision, and idea changes usually need localisation in the same pass.
 - Many "it does nothing" bugs are actually scope bugs.
+- `map/buildings.txt` is not the main source of starting building counts; state history usually is.
+- Shared-slot pressure matters for factories, dockyards, refineries, silos, rocket sites, and reactors.
 - Prefer reusable scripted helpers when logic appears more than once.
 - Use the game log and CWTools before assuming your script structure is valid.

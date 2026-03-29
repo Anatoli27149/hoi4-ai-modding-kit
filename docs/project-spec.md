@@ -45,6 +45,9 @@ The Python package provides both CLI commands and an MCP server for:
 
 The workflow assumes that content should be changed in bundles, not as isolated files.
 
+- Country creation work should usually include tag registration, country colors, country history, localisation, and flag assets.
+- State work should usually include state history, state-name localisation, building checks, and province ownership validation.
+- Map work should usually start with an overlay or validation pass before touching `provinces.bmp`, `definition.csv`, or `buildings.txt`.
 - Focus work should usually include localisation and any companion events, ideas, or decisions.
 - Event work should include namespace discipline, localisation, and trigger wiring.
 - Decision work should include localisation and reusable scripted helpers when logic repeats.
