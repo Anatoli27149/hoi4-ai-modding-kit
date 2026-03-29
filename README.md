@@ -1,52 +1,51 @@
 # HOI4 AI Modding Kit
 
-> 一个面向《钢铁雄心4》模组开发的 AI 工具链仓库。  
+> 给做《钢铁雄心4》模组的人准备的一套 AI 工具链。  
 > A practical toolkit for building Hearts of Iron IV mods with AI.
 
 ---
 
-## 这是什么
+## 这仓库是干嘛的
 
-`HOI4 AI Modding Kit` 不是单纯的“提示词集合”，也不是一个只会读文件的 MCP。
+这个仓库是我把一套比较顺手的 HOI4 AI 开发流程整理出来后的结果。
 
-它是一套面向 HOI4 模组开发的完整工作流，目标是让 AI 在做模组时更像一个靠谱的协作者，而不是偶尔吐出几段看起来像脚本的文本。
-
-这个仓库把三层能力放到了一起：
+它不是单独的 prompt 仓库，也不是只放一个 MCP 服务，而是把平时真会用到的几样东西放到一起：
 
 - `VS Code + CWTools`
-  负责编辑器内的语法、作用域、引用和部分本地化校验
+  编辑器里先把语法、作用域、引用这类基础问题拦下来
 - `hoi4-modding Skill`
-  负责约束 AI 的工作方式，让它按 HOI4 的真实结构来生成、修改、检查内容
+  让 AI 按 HOI4 模组的真实结构去干活，不要东改一点西补一点
 - `本地 MCP / CLI`
-  负责做模组根目录识别、ID 盘点、缺失本地化检查、`error.log` 汇总
+  用来查 mod 根目录、盘点 ID、找缺失本地化、汇总 `error.log`
 
-如果你的目标是：
+如果你平时会遇到这些情况：
 
-- 用 AI 辅助做 HOI4 模组
-- 降低 namespace、localisation、ID 冲突、配套文件遗漏这类错误
-- 把自己的 HOI4 开发流程沉淀成长期可复用工具链
+- AI 能写点脚本，但经常漏 localisation
+- event 能跑起来，但 namespace 和配套文件容易乱
+- 改完东西以后，不知道先查哪里最值
+- 想把自己常用的 HOI4 工作流固定下来
 
-那这个仓库就是为这个场景准备的。
+那这仓库应该能帮上忙。
 
 ---
 
-## 适合谁
+## 适合什么人用
 
 - 想用 AI 辅助开发 HOI4 模组的中文用户
-- 已经会写一些 focus、event、decision，但总是漏本地化或作用域检查的人
-- 想把“AI + MCP + Skill”真正用于具体项目，而不是停留在概念层的人
-- 想把自己的 HOI4 工作流做成可分享、可维护仓库的人
+- 已经会写一些 focus、event、decision，但老是漏本地化、scope 或配套文件的人
+- 想把 `AI + MCP + Skill` 真正用到具体项目里的人
+- 想把自己那套 HOI4 开发流程做成一个可维护仓库的人
 
 不太适合：
 
-- 只想随便试一个 prompt，不需要本地工具链的人
-- 不打算使用 Python / VS Code / 本地文件工作流的人
+- 只想临时问 AI 一两个问题，不想搭本地工具链的人
+- 完全不打算碰 Python、VS Code、本地文件工作流的人
 
 ---
 
 ## 你能用它做什么
 
-这个项目当前最适合解决下面这些高频问题：
+当前这套东西最适合处理下面这些高频问题：
 
 - 找出哪个目录才是真正的 HOI4 mod 根目录
 - 快速盘点 focus、event、decision、scripted 内容中的 ID 和 namespace
@@ -63,9 +62,11 @@
 
 ---
 
-## 为什么这套方案适合 HOI4
+## 为什么是这套组合
 
-HOI4 模组开发里最常见的问题，不是“AI 不会写几行语法”，而是：
+HOI4 模组里最烦的通常不是“不会写”，而是“看着像写对了，其实还差半截”。
+
+最常见的坑基本就是这些：
 
 - 改了 focus，忘了补 `_desc`
 - 写了 event，没处理 namespace
@@ -73,13 +74,13 @@ HOI4 模组开发里最常见的问题，不是“AI 不会写几行语法”，
 - 逻辑块能写出来，但 scope 不对
 - 报错很多时，不知道应该先修哪一类
 
-所以更有效的方案不是只加大模型，也不是只接更多工具，而是把三件事同时做好：
+所以我最后收敛出来的做法不是“换更强的模型”，也不是“疯狂接工具”，而是把三件事一起做好：
 
 1. 编辑器实时校验
 2. AI 工作流约束
 3. 本地结构化检查
 
-这个仓库就是围绕这三个层面设计的。
+这个仓库基本就是围着这三件事搭的。
 
 ---
 
@@ -108,13 +109,13 @@ python -m hoi4_ai_modding summarize-log "C:\Users\<you>\Documents\Paradox Intera
 
 ### 4. 如果你使用 Codex
 
-运行：
+先运行：
 
 ```powershell
 .\tools\install_codex_integration.ps1
 ```
 
-然后把 MCP 配置注册到 Codex：
+然后把这个 MCP 配置加到 Codex：
 
 ```toml
 [mcp_servers.hoi4-modding]
@@ -132,9 +133,9 @@ code --install-extension tboby.cwtools-vscode
 
 ---
 
-## 推荐工作流
+## 我更推荐的使用顺序
 
-实际使用时，最稳的顺序通常是：
+直接说人话版就是：
 
 1. 先识别 mod 根目录
 2. 先盘点结构和现有命名规则
@@ -143,9 +144,8 @@ code --install-extension tboby.cwtools-vscode
 5. 出问题时先汇总 `error.log`
 6. 再回去修逻辑、作用域或缺失资源
 
-一句话概括：
-
-`先看结构 -> 再改内容 -> 再做审计 -> 最后按日志修错`
+别一上来就让 AI “给我写一整套事件链”。  
+先让它看清楚你这个 mod 的结构，再动手，成功率会高很多。
 
 ---
 
@@ -158,16 +158,16 @@ src/hoi4_ai_modding/      Python 包，提供 CLI 和 MCP
 tools/                    安装到 Codex 的便捷脚本
 ```
 
-核心目录说明：
+平时最常看的几个地方：
 
 - `skills/hoi4-modding/`
-  定义 AI 在 HOI4 任务里的工作方式
+  Skill 本体，决定 AI 应该怎么做 HOI4 相关任务
 - `src/hoi4_ai_modding/core.py`
-  放核心检测逻辑
+  核心检测逻辑都在这
 - `src/hoi4_ai_modding/mcp_server.py`
-  把本地检测能力包装成 MCP
+  MCP 入口
 - `docs/syntax-quick-reference.md`
-  放实战向 HOI4 语法速查
+  常用语法速查
 
 ---
 
@@ -211,23 +211,23 @@ python -m hoi4_ai_modding serve-mcp
 
 ---
 
-## 和游戏原版文档的关系
+## 和游戏自带 documentation 的关系
 
-这个仓库不是为了替代 HOI4 自带 documentation 文件。
+这个仓库不是拿来替代 HOI4 原版文档的。
 
 如果你要查“当前游戏版本最完整的 trigger / effect 列表”，优先看游戏安装目录里的：
 
 - `...\Hearts of Iron IV\documentation\triggers_documentation.html`
 - `...\Hearts of Iron IV\documentation\effects_documentation.html`
 
-本仓库更偏向：
+这个仓库更偏向做这些事：
 
 - 高频实战语法
 - 开发流程约束
 - 项目结构检查
 - AI 协作规范
 
-也就是说，它解决的是“怎么更稳地做模组”，不是单纯提供一份 token 大字典。
+说白了，它解决的是“怎么更稳地做模组”，不是给你扔一大份 token 清单。
 
 ---
 
@@ -240,15 +240,15 @@ python -m hoi4_ai_modding serve-mcp
 
 ---
 
-## 当前状态
+## 现在做到哪了
 
-项目目前是一个轻量但实用的起步版本，重点放在：
+当前版本还是偏轻量，但已经够拿来真正干活了，重点放在：
 
 - 把 AI 协作流程做稳
 - 把最有价值的本地检查能力做出来
 - 让中文使用者可以快速看懂并开始使用
 
-后续如果继续扩展，比较值得做的方向包括：
+后面如果继续往下做，比较值得补的方向有：
 
 - 更强的 HOI4 内容类型识别
 - 更细的资源引用检查
