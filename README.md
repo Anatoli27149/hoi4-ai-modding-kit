@@ -2,6 +2,16 @@
 
 A shareable project for building Hearts of Iron IV mods with AI in a disciplined way.
 
+## 中文简介
+
+这是一个面向《钢铁雄心4》模组开发的 AI 工作流仓库，目标不是“随便生成一点脚本”，而是把真正能长期使用的三层工具链放在一起：
+
+- `VS Code + CWTools` 负责编辑器内的语法、作用域和引用校验
+- `hoi4-modding` Skill 负责约束 AI 的工作方式，让它按完整内容包来改，而不是只吐零碎片段
+- 本地 `MCP / CLI` 负责做模组根目录识别、ID 盘点、缺失本地化检查和 `error.log` 汇总
+
+如果你的目标是“用 AI 更稳定地做 HOI4 模组”，而不是只试一两个 prompt，这个仓库就是给这个场景准备的。
+
 This repository packages three layers together:
 
 - A Codex skill for HOI4-focused planning, generation, review, and debugging.
@@ -61,6 +71,27 @@ python -m hoi4_ai_modding inspect-mod "D:\Games\HOI4\mod\my_mod"
 
 4. In VS Code, install `tboby.cwtools-vscode`.
 
+## 中文快速开始
+
+1. 安装 Python 包：
+
+```powershell
+python -m pip install -e .
+```
+
+2. 对模组目录做结构检查：
+
+```powershell
+python -m hoi4_ai_modding find-mod-roots "D:\Games\HOI4\mod"
+python -m hoi4_ai_modding inspect-mod "D:\Games\HOI4\mod\my_mod"
+python -m hoi4_ai_modding inventory-ids "D:\Games\HOI4\mod\my_mod"
+python -m hoi4_ai_modding audit-localisation "D:\Games\HOI4\mod\my_mod"
+```
+
+3. 如果你在用 Codex，把 `skills/hoi4-modding/` 安装进本地技能目录，并注册 MCP。
+
+4. 在 VS Code 里安装 `CWTools`，让编辑器即时提示脚本问题。
+
 ## Codex MCP config
 
 Add this server block to your Codex config if the installer did not do it for you:
@@ -84,6 +115,7 @@ args = ["-m", "hoi4_ai_modding.mcp_server"]
 - [Setup](./docs/setup.md)
 - [Project Spec](./docs/project-spec.md)
 - [Syntax Quick Reference](./docs/syntax-quick-reference.md)
+- [中文说明](./docs/README.zh-CN.md)
 
 ## Status
 

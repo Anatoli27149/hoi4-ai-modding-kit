@@ -25,6 +25,7 @@ LOC_FIELDS = {
     "unavailable",
     "visible_tooltip",
 }
+# 这些值看起来像标识符，但通常不是 localisation key，本地化审计时要跳过。
 NON_LOC_VALUES = {
     "always",
     "and",
@@ -43,6 +44,7 @@ NON_LOC_VALUES = {
     "true",
     "yes",
 }
+# 这些块名多半是容器或控制流，不应该被当成可本地化内容 ID。
 HEURISTIC_SKIP_KEYS = {
     "abort",
     "ai_will_do",
@@ -150,6 +152,7 @@ def _extract_block_bodies(text: str, block_name: str) -> list[str]:
         if brace_index == -1:
             break
         depth = 0
+        # 用最轻量的花括号配平来抽块，足够覆盖 HOI4 脚本常见结构。
         for index in range(brace_index, len(text)):
             char = text[index]
             if char == "{":
@@ -170,6 +173,7 @@ def _collect_focus_ids(paths: Iterable[Path], root: Path) -> dict[str, list[str]
     for path in paths:
         text = _read_text(path)
         rel = _relative(path, root)
+        # focus_tree 本身也可能带 id，但真正需要防冲突的是 focus/shared_focus 的 id。
         for block_name in ("focus", "shared_focus"):
             for body in _extract_block_bodies(text, block_name):
                 match = EVENT_ID_RE.search(body)
@@ -186,6 +190,7 @@ def find_mod_roots(search_root: str, max_depth: int = 4, max_results: int = 25) 
     matches: list[dict] = []
     seen: set[Path] = set()
 
+    # 如果传入路径本身就是 mod 根目录，优先直接返回它，避免只搜子目录。
     if (root / "descriptor.mod").exists():
         seen.add(root)
         matches.append(
@@ -320,6 +325,7 @@ def _collect_block_keys(paths: Iterable[Path], root: Path) -> dict[str, list[str
             lowered = token.lower()
             if lowered in HEURISTIC_SKIP_KEYS:
                 continue
+            # 很短的全大写块名更像常量或保留标记，误报价值不高。
             if token.isupper() and len(token) <= 4:
                 continue
             values[token].append(_relative(path, root))
@@ -416,6 +422,7 @@ def _collect_expected_localisation(root: Path) -> dict[str, list[dict]]:
     for path in _iter_files(root, "events"):
         rel = _relative(path, root)
         text = _read_text(path)
+        # 事件最稳定的预期 key 是 .t 和 .d，其他 key 走启发式补充。
         for event_id in EVENT_ID_RE.findall(text):
             expected[f"{event_id}.t"].append({"reason": "event_title", "source": rel})
             expected[f"{event_id}.d"].append({"reason": "event_desc", "source": rel})
@@ -431,6 +438,7 @@ def _collect_expected_localisation(root: Path) -> dict[str, list[dict]]:
         for path in _iter_files(root, relative_dir):
             rel = _relative(path, root)
             text = _read_text(path)
+            # 决议和 idea 的块名很常直接就是 localisation key，这里做启发式收集。
             for token in BLOCK_KEY_RE.findall(text):
                 if token.lower() in HEURISTIC_SKIP_KEYS:
                     continue
@@ -505,6 +513,7 @@ def summarize_error_log(log_path: str, limit: int = 20) -> dict:
     inspected = lines[-5000:]
     for line in inspected:
         category = "other"
+        # 先按高价值问题分组，便于决定“先修缺 loc”还是“先修 effect/trigger”。
         for name, pattern in ERROR_PATTERNS:
             if pattern.search(line):
                 category = name

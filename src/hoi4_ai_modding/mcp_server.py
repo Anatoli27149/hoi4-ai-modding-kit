@@ -17,6 +17,7 @@ from .core import (
 mcp = FastMCP(
     name="hoi4-modding",
     instructions=(
+        # MCP 层尽量保持薄，只做参数接入和结构化输出。
         "Inspect Hearts of Iron IV mod folders, inventory IDs, audit localisation, "
         "and summarize HOI4 error logs."
     ),

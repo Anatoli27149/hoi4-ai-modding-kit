@@ -14,6 +14,7 @@ from .mcp_server import mcp
 
 
 def find_mod_roots_main() -> None:
+    # 每个子命令都保持单一职责，方便后面既能做 CLI，也能包给别的工具调用。
     parser = argparse.ArgumentParser(description="Find likely Hearts of Iron IV mod roots.")
     parser.add_argument("search_root", help="Directory to search.")
     parser.add_argument("--max-depth", type=int, default=4, help="Maximum search depth from the search root.")
@@ -64,4 +65,5 @@ def summarize_error_log_main() -> None:
 
 
 def serve_mcp_main() -> None:
+    # MCP 模式下直接复用同一套核心逻辑，避免 CLI 和 MCP 分叉。
     mcp.run()
