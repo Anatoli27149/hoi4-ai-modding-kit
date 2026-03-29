@@ -1,0 +1,4 @@
+interface:
+  display_name: "HOI4 Modding"
+  short_description: "Build and debug Hearts of Iron IV mods with guardrails"
+  default_prompt: "Use $hoi4-modding to plan, implement, and validate a Hearts of Iron IV mod feature."

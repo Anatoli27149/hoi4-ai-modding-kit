@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hoi4-ai-modding-kit"
+version = "0.1.0"
+description = "Skill, MCP server, and validation tooling for Hearts of Iron IV modding with AI."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "mcp>=1.0.0",
+  "pydantic>=2.7.0",
+]
+
+[project.scripts]
+hoi4-find-mod-roots = "hoi4_ai_modding.cli:find_mod_roots_main"
+hoi4-inspect-mod = "hoi4_ai_modding.cli:inspect_mod_structure_main"
+hoi4-inventory-ids = "hoi4_ai_modding.cli:inventory_ids_main"
+hoi4-audit-localisation = "hoi4_ai_modding.cli:audit_localisation_main"
+hoi4-summarize-log = "hoi4_ai_modding.cli:summarize_error_log_main"
+hoi4-mcp-server = "hoi4_ai_modding.cli:serve_mcp_main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
