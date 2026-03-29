@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HOI4 AI Modding Kit</title>
+  <meta name="description" content="给做《钢铁雄心4》模组的人准备的一套 AI 工具链，包含 Skill、MCP、CLI 和中文文档。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./site.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <nav class="topbar">
+        <a class="brand" href="https://github.com/Anatoli27149/hoi4-ai-modding-kit">HOI4 AI Modding Kit</a>
+        <div class="topbar-links">
+          <a href="./README.zh-CN.md">中文说明</a>
+          <a href="./syntax-quick-reference.md">语法速查</a>
+          <a href="./hoi4-country-state-formulas.md">任务公式</a>
+        </div>
+      </nav>
+
+      <div class="hero-grid">
+        <section class="hero-copy">
+          <p class="eyebrow">给做《钢铁雄心4》模组的人准备的一套 AI 工具链</p>
+          <h1>别再让 AI 只会写片段。<br>让它按项目结构把活干完整。</h1>
+          <p class="hero-text">
+            这个仓库不是单独的 prompt 集，也不是只塞一个 MCP 服务。
+            它是把 HOI4 模组开发里最容易掉链子的几件事，拆成一套能真的长期用下去的工作流：
+            编辑器校验、AI Skill 约束、本地结构化检查，再加一套中文文档把门槛压下来。
+          </p>
+
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://github.com/Anatoli27149/hoi4-ai-modding-kit">查看仓库</a>
+            <a class="button button-secondary" href="./hoi4-country-state-formulas.md">直接看国家 / 州 / 地图公式</a>
+          </div>
+
+          <ul class="hero-points">
+            <li>不是只帮你写一段脚本，而是按内容包一起补本地化、配套文件和校验。</li>
+            <li>适合 focus、event、decision，也适合国家创建、州分配、工厂平衡和州预览图。</li>
+            <li>默认优先走游戏自带 documentation 和原版样板，不靠拍脑袋瞎写。</li>
+          </ul>
+        </section>
+
+        <aside class="hero-panel">
+          <div class="terminal-card">
+            <div class="terminal-top">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <pre><code>python -m pip install -e .
+python -m hoi4_ai_modding inspect-mod "D:\Games\HOI4\mod\my_mod"
+python -m hoi4_ai_modding inventory-ids "D:\Games\HOI4\mod\my_mod"
+python -m hoi4_ai_modding audit-localisation "D:\Games\HOI4\mod\my_mod"
+python -m hoi4_ai_modding summarize-log "...\\error.log"</code></pre>
+          </div>
+
+          <div class="panel-note">
+            <strong>一句话理解：</strong>
+            先看结构，再让 AI 动手；改完立刻审计，不靠撞运气排错。
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="section-heading">
+          <p class="section-kicker">这仓库到底解决什么问题</p>
+          <h2>不是“不会写”，而是“老差半截”</h2>
+        </div>
+
+        <div class="cards three-up">
+          <article class="card">
+            <h3>AI 写了，但没写全</h3>
+            <p>focus 补了效果，忘了 `_desc`；event 能跑，namespace 和选项本地化没跟上；decision 改了一半，脚本助手没抽出来。</p>
+          </article>
+          <article class="card">
+            <h3>脚本看着像对，进游戏不生效</h3>
+            <p>很多时候不是逻辑不会写，而是 scope、引用、文件位置、配套资源有一处偏了，最后整段都白干。</p>
+          </article>
+          <article class="card">
+            <h3>日志一炸，不知道先修哪类</h3>
+            <p>报错多的时候最怕乱修。这套东西的核心思路就是先把结构和高频低级错拦下来，再解决真正的玩法逻辑。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="section-kicker">核心组成</p>
+          <h2>三样东西一起用，效果才稳</h2>
+        </div>
+
+        <div class="cards three-up">
+          <article class="card accent-card">
+            <h3>VS Code + CWTools</h3>
+            <p>先把语法、作用域、引用这类编辑期就能发现的问题拦下来，别让 AI 每次都靠猜。</p>
+          </article>
+          <article class="card accent-card">
+            <h3>hoi4-modding Skill</h3>
+            <p>让 AI 按真实项目结构干活：先看邻近文件，再按 bundle 生成，最后做审计，不许只改孤立片段。</p>
+          </article>
+          <article class="card accent-card">
+            <h3>本地 MCP / CLI</h3>
+            <p>拿来查 mod 根目录、盘点 ID、查缺失 localisation、汇总 error.log，把机械活交给工具。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="section-kicker">现在最实用的部分</p>
+          <h2>高频重活已经拆成可复用公式</h2>
+        </div>
+
+        <div class="formula-layout">
+          <article class="formula-card">
+            <h3>国家创建</h3>
+            <p>不是只生成一个 `history/countries` 文件，而是一次把 tag、颜色、历史预设、本地化、旗帜和角色包补齐。</p>
+            <a href="./hoi4-country-state-formulas.md">看国家 bundle 公式</a>
+          </article>
+          <article class="formula-card">
+            <h3>州与工厂分配</h3>
+            <p>先算共享建筑槽，再决定州类别和工厂数量，沿海建筑、省级建筑、州级建筑的边界都写死了。</p>
+            <a href="./hoi4-country-state-formulas.md">看州和建筑公式</a>
+          </article>
+          <article class="formula-card">
+            <h3>州预览图和地图改动</h3>
+            <p>默认先生成州块预览图和冲突报告，只有真的要改省份边界时才去动 `provinces.bmp` 和 `definition.csv`。</p>
+            <a href="./hoi4-country-state-formulas.md">看地图工作流</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="section workflow-section">
+        <div class="section-heading">
+          <p class="section-kicker">推荐上手顺序</p>
+          <h2>别一上来就让 AI 写一整套事件链</h2>
+        </div>
+
+        <ol class="workflow-list">
+          <li>先识别 mod 根目录，确认哪个目录才是真正的工作目录。</li>
+          <li>先盘点现有结构、命名风格、namespace 和已有 ID。</li>
+          <li>再让 AI 生成或修改内容，而且必须按内容包一起动。</li>
+          <li>改完马上跑 localisation 审计、ID 审计和日志汇总。</li>
+          <li>如果还要做国家、州、地图类重活，直接按“任务公式”那套流程走，不要临时凭感觉编。</li>
+        </ol>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="section-kicker">文档入口</p>
+          <h2>先看这些，基本就够开工了</h2>
+        </div>
+
+        <div class="cards docs-grid">
+          <a class="doc-card" href="./README.zh-CN.md">
+            <strong>中文说明</strong>
+            <span>先搞清这个仓库是干嘛的，适合谁用，怎么配合 AI。</span>
+          </a>
+          <a class="doc-card" href="./setup.md">
+            <strong>安装说明</strong>
+            <span>装 Python 包、接 Codex、接 MCP、配 VS Code。</span>
+          </a>
+          <a class="doc-card" href="./syntax-quick-reference.md">
+            <strong>语法速查</strong>
+            <span>focus、event、decision、idea、country、state 的高频写法。</span>
+          </a>
+          <a class="doc-card" href="./hoi4-country-state-formulas.md">
+            <strong>国家 / 州 / 地图公式</strong>
+            <span>把国家创建、州文件、工厂分配和州块图流程彻底写细。</span>
+          </a>
+          <a class="doc-card" href="./project-spec.md">
+            <strong>项目规范</strong>
+            <span>看这套仓库为什么这样设计，理解 bundle 思路和非目标。</span>
+          </a>
+          <a class="doc-card" href="https://github.com/Anatoli27149/hoi4-ai-modding-kit">
+            <strong>GitHub 仓库</strong>
+            <span>直接看源码、提交记录和仓库说明。</span>
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

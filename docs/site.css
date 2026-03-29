@@ -1,0 +1,380 @@
+:root {
+  --bg: #efe2c4;
+  --bg-deep: #d6c09c;
+  --paper: rgba(255, 249, 237, 0.82);
+  --paper-strong: #fff7e8;
+  --ink: #1b1612;
+  --muted: #5f5247;
+  --line: rgba(27, 22, 18, 0.12);
+  --accent: #8f2d19;
+  --accent-2: #2f5e68;
+  --accent-3: #c17b29;
+  --shadow: 0 24px 60px rgba(70, 42, 20, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(193, 123, 41, 0.26), transparent 32%),
+    radial-gradient(circle at top right, rgba(47, 94, 104, 0.22), transparent 28%),
+    linear-gradient(180deg, #f4ead4 0%, var(--bg) 42%, var(--bg-deep) 100%);
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(27, 22, 18, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27, 22, 18, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  content: "";
+  pointer-events: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.page-shell {
+  width: min(1200px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 24px 0 72px;
+}
+
+.hero,
+.section {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background: var(--paper);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow);
+}
+
+.hero {
+  padding: 26px 26px 36px;
+}
+
+.hero::after,
+.section::after {
+  position: absolute;
+  inset: auto -10% -30%;
+  height: 160px;
+  background: linear-gradient(90deg, rgba(143, 45, 25, 0.08), rgba(47, 94, 104, 0.08));
+  filter: blur(36px);
+  content: "";
+  pointer-events: none;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 34px;
+}
+
+.brand {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.topbar-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.topbar-links a {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.5);
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.topbar-links a:hover,
+.button:hover,
+.doc-card:hover,
+.formula-card:hover {
+  transform: translateY(-2px);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.9fr;
+  gap: 28px;
+}
+
+.eyebrow,
+.section-kicker {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero h1,
+.section h2 {
+  margin: 0;
+  font-family: "Space Grotesk", "Noto Sans SC", sans-serif;
+  line-height: 1.05;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 4vw, 4.8rem);
+}
+
+.section h2 {
+  font-size: clamp(1.8rem, 2.2vw, 3rem);
+}
+
+.hero-text {
+  max-width: 42rem;
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.9;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 24px 0 22px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 700;
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+.button-primary {
+  color: #fff8f1;
+  background: linear-gradient(135deg, var(--accent), #bf4b2d);
+}
+
+.button-secondary {
+  border-color: rgba(47, 94, 104, 0.24);
+  background: rgba(47, 94, 104, 0.08);
+  color: #20464d;
+}
+
+.hero-points {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.hero-panel {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.terminal-card,
+.panel-note,
+.card,
+.formula-card,
+.doc-card {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--paper-strong);
+}
+
+.terminal-card {
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(44, 32, 23, 0.12);
+}
+
+.terminal-top {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px;
+  background: linear-gradient(90deg, rgba(143, 45, 25, 0.16), rgba(47, 94, 104, 0.16));
+}
+
+.terminal-top span {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(27, 22, 18, 0.2);
+}
+
+.terminal-card pre {
+  margin: 0;
+  padding: 18px 18px 20px;
+  overflow: auto;
+  color: #f4ecdf;
+  background: #241c17;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.panel-note {
+  padding: 18px 20px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.section {
+  margin-top: 28px;
+  padding: 32px 26px;
+}
+
+.section-heading {
+  max-width: 760px;
+  margin-bottom: 20px;
+}
+
+.cards {
+  display: grid;
+  gap: 18px;
+}
+
+.three-up {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.card,
+.formula-card {
+  padding: 22px 20px;
+}
+
+.card h3,
+.formula-card h3 {
+  margin: 0 0 10px;
+  font-size: 1.18rem;
+}
+
+.card p,
+.formula-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.85;
+}
+
+.accent-card {
+  position: relative;
+}
+
+.accent-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  border-radius: 24px 24px 0 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+  content: "";
+}
+
+.formula-layout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.formula-card a {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.workflow-list {
+  margin: 0;
+  padding-left: 1.35rem;
+  color: var(--muted);
+  line-height: 1.95;
+  font-size: 1.02rem;
+}
+
+.docs-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.doc-card {
+  display: block;
+  padding: 20px;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.doc-card strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.08rem;
+}
+
+.doc-card span {
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.topbar-links a:hover,
+.doc-card:hover,
+.formula-card:hover {
+  border-color: rgba(143, 45, 25, 0.2);
+  background: #fffdf6;
+}
+
+@media (max-width: 980px) {
+  .hero-grid,
+  .three-up,
+  .formula-layout,
+  .docs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: min(100vw - 18px, 100%);
+    padding: 10px 0 44px;
+  }
+
+  .hero,
+  .section {
+    padding: 18px 16px 22px;
+    border-radius: 22px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+  }
+}

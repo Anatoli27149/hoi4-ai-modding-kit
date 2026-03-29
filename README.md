@@ -171,6 +171,8 @@ tools/                    安装到 Codex 的便捷脚本
   常用语法速查
 - `docs/hoi4-country-state-formulas.md`
   国家、州、地图和建筑分配的细化公式
+- `docs/index.html`
+  可直接拿去做 GitHub Pages 首页的中文落地页
 
 ---
 
@@ -240,6 +242,7 @@ python -m hoi4_ai_modding serve-mcp
 - [项目规范](./docs/project-spec.md)
 - [HOI4 语法速查](./docs/syntax-quick-reference.md)
 - [国家 / 州 / 地图 / 工厂公式](./docs/hoi4-country-state-formulas.md)
+- [网站首页](./docs/index.html)
 - [中文说明页](./docs/README.zh-CN.md)
 
 ---
